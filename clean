@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Straight from http://blog.yohanliyanage.com/2015/05/docker-clean-up-after-yourself
+
+#Make sure that exited containers are deleted.
+docker rm -v $(docker ps -a -q -f status=exited)
+#Remove unwanted ‘dangling’ images.  
+docker rmi $(docker images -f "dangling=true" -q)
+#Still not enough space? What is this ‘vfs’ directory?
+docker run -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/docker:/var/lib/docker --rm martin/docker-cleanup-volumes

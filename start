@@ -1,0 +1,6 @@
+#!/bin/bash
+
+docker stop schalksnyman/conor-monitoring-rig
+docker rm -v $(docker ps -a -q -f NAMES=monrig)
+
+docker run -d -v /etc/localtime:/etc/localtime:ro -p 80:80 -p 8083:8083 -p 8084:8084 -p 8086:8086 --name monrig schalksnyman/conor-monitoring-rig
