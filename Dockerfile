@@ -102,7 +102,7 @@ RUN     yum -y install https://grafanarel.s3.amazonaws.com/builds/grafana-3.0.2-
 # ---------------------
 #   Configure Riemann (TBD)
 # ---------------------
-
+ADD     riemann/riemann.config /src/riemann/etc/riemann.config
 
 # ----------------------
 #   Configure InfluxDB
