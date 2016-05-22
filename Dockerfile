@@ -77,9 +77,12 @@ RUN     yum -y install epel-release && \
         yum -y install fontconfig nodejs npm && \
         yum -y install nginx wget && \
         yum -y install java-1.8.0-openjdk && \
+        yum -y install rubygems ruby-dev && \
         yum -y install hostname inotify-tools yum-utils which && \
         yum -y install python-setuptools && \
         easy_install supervisor
+
+RUN     gem install riemann-client riemann-tools riemann-dash
 
 # -----------------------------------
 #   Install Riemann to /src/riemann
@@ -100,7 +103,7 @@ RUN     yum -y install influxdb
 RUN     yum -y install https://grafanarel.s3.amazonaws.com/builds/grafana-3.0.2-1463383025.x86_64.rpm
 
 # ---------------------
-#   Configure Riemann (TBD)
+#   Configure Riemann
 # ---------------------
 ADD     riemann/riemann.config /src/riemann/etc/riemann.config
 
@@ -152,8 +155,10 @@ RUN     yum clean all
 # -------------------
 #   Expose ports
 # -------------------
-# Riemann
+# Riemann TCP/UDP servers
 EXPOSE  5555
+
+# Riemann Websockets server
 EXPOSE  5556
 
 # InfluxDB Admin server
