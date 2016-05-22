@@ -42,6 +42,7 @@ ENV     INFLUXDB_GRAFANA_PW     gr@fana@cvm
 # 
 #VOLUME  /mnt/docker_rig/riemann
 VOLUME  /mnt/docker_rig/influxdb
+VOLUME  /var/log/supervisor
 #VOLUME  /mnt/docker_rig/grafana
 #VOLUME  /mnt/docker_rig/supervisord
 #VOLUME  /mnt/docker_rig/docker
@@ -119,7 +120,7 @@ RUN     mkdir /mnt/docker_rig/influxdb/shared/data -p && \
 #   Configure Grafana
 # ----------------------
 ADD     grafana/config.js /usr/share/grafana/config.js
-
+ADD     grafana/dash.json /var/lib/grafana/dashboards/dash.json
 ADD     grafana/grafana.ini /etc/grafana/grafana.ini
 #RUN     chown grafana:grafana /etc/grafana/grafana.ini
 
@@ -132,11 +133,16 @@ RUN     /configure.sh
 #   Configure nginx
 # -------------------------
 ADD     nginx/nginx.conf /etc/nginx/nginx.conf
+RUN     mkdir -p /var/www && \
+        ln -s /usr/share/grafana -d /var/www/grafana && \
+        chown nginx:nginx /var/www/grafana -R && \
+        chown nginx:nginx /usr/share/grafana -R && \
+        rm -f /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/example_ssl.conf
 
 # -------------------------
 #   Configure supervisord
 # -------------------------
-ADD     supervisor/supervisord.conf /etc/supervisord.conf
+ADD     supervisor/supervisord.conf /etc/supervisord.d/supervisord.conf
 
 # -----------
 #   Cleanup  
@@ -165,4 +171,4 @@ EXPOSE  80
 # -------------------
 #   Run!
 # -------------------
-CMD     ["/usr/bin/supervisord"]
+CMD     ["/usr/bin/supervisord", "-c", "/etc/supervisord.d/supervisord.conf"]

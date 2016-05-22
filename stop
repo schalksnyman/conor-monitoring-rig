@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker stop schalksnyman/conor-monitoring-rig
+docker stop monrig
 docker rm -v $(docker ps -a -q -f NAMES=monrig)
