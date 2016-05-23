@@ -76,9 +76,9 @@ RUN     yum -y install epel-release && \
         yum -y groupinstall "Development Tools" && \
         yum -y install fontconfig nodejs npm && \
         yum -y install nginx wget && \
-        yum -y install java-1.8.0-openjdk && \
-        yum -y install rubygems ruby-dev && \
+        yum -y install java-1.8.0-openjdk && \        
         yum -y install hostname inotify-tools yum-utils which && \
+        yum -y install rubygems ruby-dev && \
         yum -y install python-setuptools && \
         easy_install supervisor
 

@@ -25,7 +25,7 @@ else
     echo ""
 
     echo "=> Create admin User"
-    curl -s -k -X POST $(echo ${API_URL}'/query') --data-urlencode "q=CREATE USER admin WITH PASSWORD '${ADMIN_PW}' WITH ALL PRIVILEGES"
+    curl -s -k -X POST $(echo ${API_URL}'/query') --data-urlencode "q=CREATE USER admin WITH PASSWORD '${INFLUXDB_ADMIN_PW}' WITH ALL PRIVILEGES"
     #curl -s -k -X POST -d "{\"password\":\"${ROOT_PW}\"}" $(echo ${API_URL}'/cluster_admins/root?u=root&p=root')
     echo ""
 
@@ -33,17 +33,17 @@ else
     do
         echo "=> Creating database: ${x}"
         #curl -s -k -X POST -d "{\"name\":\"${x}\"}" $(echo ${API_URL}'/db?u=root&p=root')
-        curl -s -k -X POST $(echo ${API_URL}'/query') -u admin:${ADMIN_PW} --data-urlencode "q=CREATE DATABASE ${x}"
+        curl -s -k -X POST $(echo ${API_URL}'/query') -u admin:${INFLUXDB_ADMIN_PW} --data-urlencode "q=CREATE DATABASE ${x}"
     done
     echo ""
     
     echo "=> Creating User for database: data"
-    curl -s -k -X POST $(echo ${API_URL}'/query') -u admin:${ADMIN_PW} --data-urlencode "q=CREATE USER ${INFLUXDB_DATA_USER} WITH PASSWORD '${INFLUXDB_DATA_PW}'"
-    curl -s -k -X POST $(echo ${API_URL}'/query') -u admin:${ADMIN_PW} --data-urlencode "q=GRANT ALL ON data TO ${INFLUXDB_DATA_USER}"
+    curl -s -k -X POST $(echo ${API_URL}'/query') -u admin:${INFLUXDB_ADMIN_PW} --data-urlencode "q=CREATE USER ${INFLUXDB_DATA_USER} WITH PASSWORD '${INFLUXDB_DATA_PW}'"
+    curl -s -k -X POST $(echo ${API_URL}'/query') -u admin:${INFLUXDB_ADMIN_PW} --data-urlencode "q=GRANT ALL ON data TO ${INFLUXDB_DATA_USER}"
     #curl -s -k -X POST -d "{\"name\":\"${INFLUXDB_DATA_USER}\",\"password\":\"${INFLUXDB_DATA_PW}\"}" $(echo ${API_URL}'/db/data/users?u=root&p=root')
     echo "=> Creating User for database: grafana"
-    curl -s -k -X POST $(echo ${API_URL}'/query') -u admin:${ADMIN_PW} --data-urlencode "q=CREATE USER ${INFLUXDB_GRAFANA_USER} WITH PASSWORD '${INFLUXDB_GRAFANA_PW}'"
-    curl -s -k -X POST $(echo ${API_URL}'/query') -u admin:${ADMIN_PW} --data-urlencode "q=GRANT ALL ON grafana TO ${INFLUXDB_GRAFANA_USER}"
+    curl -s -k -X POST $(echo ${API_URL}'/query') -u admin:${INFLUXDB_ADMIN_PW} --data-urlencode "q=CREATE USER ${INFLUXDB_GRAFANA_USER} WITH PASSWORD '${INFLUXDB_GRAFANA_PW}'"
+    curl -s -k -X POST $(echo ${API_URL}'/query') -u admin:${INFLUXDB_ADMIN_PW} --data-urlencode "q=GRANT ALL ON grafana TO ${INFLUXDB_GRAFANA_USER}"
 	#curl -s -k -X POST -d "{\"name\":\"${INFLUXDB_GRAFANA_USER}\",\"password\":\"${INFLUXDB_GRAFANA_PW}\"}" $(echo ${API_URL}'/db/grafana/users?u=root&p=root')
     echo ""
     
